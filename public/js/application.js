@@ -2,12 +2,33 @@
 google.maps.event.addDomListener(window, 'load', initialize);
 
 var locations = [
-  ['Dev Boot Camp', 37.784633, -122.397414, 4],
-  ['China Town', 37.794138, -122.407791, 5],
-  ['Ferry Building', 37.795923, -122.392052, 3],
-  ['Golden Gate Bridge', 37.819877, -122.478939, 2],
-  ['Presidio', 37.798874, -122.466194, 1]
+  ['Dev Boot Camp', 37.784633, -122.397414],
+  ['China Town', 37.794138, -122.407791],
+  ['Ferry Building', 37.795923, -122.392052],
+  ['Golden Gate Bridge', 37.819877, -122.478939],
+  ['Presidio', 37.798874, -122.466194]
 ];
+
+var contentString = '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+    '<div id="bodyContent">'+
+    '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+    'sandstone rock formation in the southern part of the '+
+    'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+    'south west of the nearest large town, Alice Springs; 450&#160;km '+
+    '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+    'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+    'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+    'Aboriginal people of the area. It has many springs, waterholes, '+
+    'rock caves and ancient paintings. Uluru is listed as a World '+
+    'Heritage Site.</p>'+
+    '<p>Attribution: Uluru, <a href="http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+    'http://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+    '(last visited June 22, 2009).</p>'+
+    '</div>'+
+    '</div>';
 
 function initialize() {
   // map options
@@ -19,12 +40,13 @@ function initialize() {
   // initialize map
   var map = new google.maps.Map(document.getElementById("map-canvas"),
       mapOptions);
+
   // set markers
   setMarkers(map,locations);
+
 }
 
 function setMarkers(map,local){
-  debugger;
   // set multiple marker
   for (var i = 0; i < local.length; i++){
     // initialize markers
@@ -36,18 +58,27 @@ function setMarkers(map,local){
       animation: google.maps.Animation.DROP,
       position: myLatLng,
       title: site[0],
-      zIndex: site[3]
+
     });
-    google.maps.event.addListener(marker, 'click', toggleBounce);
+    (function(marker,i){
+      google.maps.event.addListener(marker, 'click', function(){
+        marker.info = new google.maps.InfoWindow({
+          content: contentString
+           });
+        marker.info.open(map,marker)
+      });
+    })(marker, i);
   }
 }
 
-function toggleBounce() {
-  if (marker.getAnimation() != null) {
-    marker.setAnimation(null);
-  } else {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-  }
-}
+
+// function toggleBounce() {
+
+//   if (marker.getAnimation() != null) {
+//     marker.setAnimation(null);
+//   } else {
+//     marker.setAnimation(google.maps.Animation.BOUNCE);
+//   }
+// }
 
 
