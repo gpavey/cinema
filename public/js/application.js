@@ -40,10 +40,8 @@ function initialize() {
   // initialize map
   var map = new google.maps.Map(document.getElementById("map-canvas"),
       mapOptions);
-
   // set markers
   setMarkers(map,locations);
-
 }
 
 function setMarkers(map,local){
@@ -58,8 +56,8 @@ function setMarkers(map,local){
       animation: google.maps.Animation.DROP,
       position: myLatLng,
       title: site[0],
-
     });
+
     (function(marker,i){
       google.maps.event.addListener(marker, 'click', function(){
         marker.info = new google.maps.InfoWindow({
@@ -72,13 +70,6 @@ function setMarkers(map,local){
 }
 
 
-// function toggleBounce() {
 
-//   if (marker.getAnimation() != null) {
-//     marker.setAnimation(null);
-//   } else {
-//     marker.setAnimation(google.maps.Animation.BOUNCE);
-//   }
-// }
 
 
