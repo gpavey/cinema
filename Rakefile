@@ -109,7 +109,13 @@ namespace :db do
 
   desc "Populate the database with dummy data by running db/seeds.rb"
   task :seed do
-    require APP_ROOT.join('db', 'seeds.rb')
+    require 'csv'
+    csv_text = File.read('./db/movies.csv')
+    csv = CSV.parse(csv_text, :headers => true)
+    csv.each do |row|
+      Movie.create!(row.to_hash)
+    end
+    # require APP_ROOT.join('db', 'seeds.rb')
   end
 
   desc "Returns the current schema version number"
