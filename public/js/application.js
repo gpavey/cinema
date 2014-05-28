@@ -1,5 +1,4 @@
 
-// google.maps.event.addDomListener(window, 'load', initialize);
 $(document).ready(function(){
   var mapCenter = new google.maps.LatLng(37.7833, -122.4167);
   var map;
@@ -11,9 +10,10 @@ $(document).ready(function(){
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
   };  //end document ready
+
     $('.add_movies').on('click', addMarkers)
 
-    // var oms = new OverlappingMarkerSpiderfier(map);
+    var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,keepSpiderfied: true});
 
   function addMarkers(e) {
   e.preventDefault();
@@ -55,6 +55,7 @@ $(document).ready(function(){
       });
 
       markers.push(marker);
+      oms.addMarker(marker);
 
       var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
@@ -71,14 +72,13 @@ $(document).ready(function(){
       '</div>';
 
       var infowindow = new google.maps.InfoWindow();
-          infowindow.setContent(contentString);
-          google.maps.event.addListener(
-            marker,
-            'click',
-            infoCallback(infowindow, marker)
-          );
+      infowindow.setContent(contentString);
+      google.maps.event.addListener(marker,'click',infoCallback(infowindow, marker));
+
+
 
     } // End i loop
+    oms.addListener('spiderfy', function(markers) {infowindow.close();});
       var mcOptions = {gridSize: 30, maxZoom: 15};
       var markerCluster = new MarkerClusterer(map, markers, mcOptions);
   } // End setMarkers
