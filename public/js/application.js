@@ -85,7 +85,7 @@ function setMarkers(map,locations){
     })
     (marker, i);
   }
-var mcOptions = {gridSize: 20, maxZoom: 15};
+var mcOptions = {gridSize: 30, maxZoom: 15};
 var markerCluster = new MarkerClusterer(map, markers, mcOptions);
 }
 
