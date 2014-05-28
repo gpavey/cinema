@@ -1,4 +1,4 @@
-
+save.js
 google.maps.event.addDomListener(window, 'load', initialize);
 
 // var locations = [
@@ -31,10 +31,13 @@ google.maps.event.addDomListener(window, 'load', initialize);
 //     '</div>';
 
 function initialize() {
+  // map options
   var mapOptions = {
     center: new google.maps.LatLng(37.7833, -122.4167),
     zoom: 13
   };
+
+  // initialize map
   var map = new google.maps.Map(document.getElementById("map-canvas"),
       mapOptions);
 
@@ -61,19 +64,21 @@ function initialize() {
 }
 
 function setMarkers(map,locations){
+  // set multiple marker
   var markers = [];
-  for (var i = 0; i < locations.length; i++){
+  var mcOptions = {gridSize: 50, maxZoom: 15};
+  var markerCluster = new MarkerClusterer(map, markers,mcOptions);
+  for (var i = 0; i < 100; i++){
+    // initialize markers
     var site = locations[i];
     var myLatLng = new google.maps.LatLng(site.lat,site.lng);
     var marker = new google.maps.Marker({
-      // map: map,
+      map: map,
       draggable: false,
-      // animation: google.maps.Animation.DROP,
+      animation: google.maps.Animation.DROP,
       position: myLatLng,
       title: site.title,
     });
-
-    markers.push(marker);
 
     (function(marker,i){
       google.maps.event.addListener(marker, 'click', function(){
@@ -84,9 +89,8 @@ function setMarkers(map,locations){
       });
     })
     (marker, i);
+    // markers.push(marker,i);
   }
-var mcOptions = {gridSize: 20, maxZoom: 15};
-var markerCluster = new MarkerClusterer(map, markers, mcOptions);
 }
 
 
