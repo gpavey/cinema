@@ -1,19 +1,23 @@
 
-// google.maps.event.addDomListener(window, 'load', initialize);
 $(document).ready(function(){
   var mapCenter = new google.maps.LatLng(37.7833, -122.4167);
   var map;
   map_initialize();
+
+
   function map_initialize() {
     var mapOptions = {
       center: mapCenter,
-      zoom: 13
+      zoom: 13,
+      overviewMapControl: true,
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
   };  //end document ready
-    $('.add_movies').on('click', addMarkers)
 
-    // var oms = new OverlappingMarkerSpiderfier(map);
+  $('.add_movies').on('click', addMarkers)
+  $('.add_movies').trigger('click')
+
+  var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,keepSpiderfied: true});
 
   function addMarkers(e) {
   e.preventDefault();
@@ -35,13 +39,12 @@ $(document).ready(function(){
 
   function infoCallback(infowindow, marker) {
     return function() {
-    infowindow.open(map, marker);
+    infowindow.open(map,this);
     };
   };
 
   function setMarkers(map,locations){
     var markers = [];
-    var infowindows = [];
     for (var i = 0; i < locations.length; i++){
       var site = locations[i];
       var myLatLng = new google.maps.LatLng(site.lat,site.lng);
@@ -55,6 +58,7 @@ $(document).ready(function(){
       });
 
       markers.push(marker);
+      oms.addMarker(marker);
 
       var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
@@ -65,25 +69,25 @@ $(document).ready(function(){
           '<p><b>Locaton: </b>'+site.location+'</p>'+
           '<p><b>Director: </b>'+site.director+'</p>'+
           '<p><b>Writer: </b>'+site.writer+'</p>'+
-          '<p><b>Lead Actors, </b>'+site.actor1+', '+site.actor2+', '+site.actor3+'</p>'+
+          '<p><b>Lead Actors: </b>'+site.actor1+', '+site.actor2+', '+site.actor3+'</p>'+
           '<p><b>Fun Fact: </b>'+site.fun_fact+'</p>'+
+          '<p><a href="http://www.imdb.com/find?s=tt&q='+site.title+'">'+
+            'http://www.imdb.com/find?s=tt&q='+site.title+'</a>' +
+            '</p>'+
         '</div>'+
       '</div>';
 
       var infowindow = new google.maps.InfoWindow();
-          infowindow.setContent(contentString);
-          google.maps.event.addListener(
-            marker,
-            'click',
-            infoCallback(infowindow, marker)
-          );
+      infowindow.setContent(contentString);
+      google.maps.event.addListener(marker,'click',infoCallback(infowindow, marker));
 
     } // End i loop
+    oms.addListener('spiderfy', function(markers) {infowindow.close();});
       var mcOptions = {gridSize: 30, maxZoom: 15};
       var markerCluster = new MarkerClusterer(map, markers, mcOptions);
   } // End setMarkers
-
 }); // End on load
+
 
 
 

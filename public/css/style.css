@@ -65,3 +65,7 @@ nav {
     }
 
 .navbar li ul li a:hover  {background-color: #808080;}
+
+.add_movies{
+  visibility: hidden;
+}

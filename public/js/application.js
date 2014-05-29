@@ -3,7 +3,9 @@ $(document).ready(function(){
   var mapCenter = new google.maps.LatLng(37.7833, -122.4167);
   var map;
   map_initialize();
-
+  $('.add_movies').on('click', addMarkers)
+  $('.add_movies').trigger('click')
+  var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,keepSpiderfied: true});
 
   function map_initialize() {
     var mapOptions = {
@@ -13,10 +15,6 @@ $(document).ready(function(){
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
   };  //end document ready
-
-  $('.add_movies').on('click', addMarkers)
-
-  var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,keepSpiderfied: true});
 
   function addMarkers(e) {
   e.preventDefault();
@@ -36,18 +34,12 @@ $(document).ready(function(){
   alert('what the fuck? check for errors!')
   }
 
-  function infoCallback(infowindow, marker) {
-    return function() {
-    infowindow.open(map,this);
-    };
-  };
 
   function setMarkers(map,locations){
     var markers = [];
     for (var i = 0; i < locations.length; i++){
       var site = locations[i];
       var myLatLng = new google.maps.LatLng(site.lat,site.lng);
-
       var marker = new google.maps.Marker({
         map: map,
         draggable: false,
@@ -78,15 +70,23 @@ $(document).ready(function(){
 
       var infowindow = new google.maps.InfoWindow();
       infowindow.setContent(contentString);
-      google.maps.event.addListener(marker,'click',infoCallback(infowindow, marker));
+      google.maps.event.addListener(marker,'click',infoWindowCallback(infowindow, marker));
 
     } // End i loop
+
     oms.addListener('spiderfy', function(markers) {infowindow.close();});
-      var mcOptions = {gridSize: 30, maxZoom: 15};
-      var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+    var mcOptions = {gridSize: 30, maxZoom: 15};
+    var markerCluster = new MarkerClusterer(map, markers, mcOptions);
   } // End setMarkers
 
+  function infoWindowCallback(infowindow, marker) {
+    return function() {
+    infowindow.open(map,this);
+    };
+  };
+
 }); // End on load
+
 
 
 
