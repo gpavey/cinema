@@ -69,3 +69,9 @@ nav {
 .add_movies{
   visibility: hidden;
 }
+.ftCtrl .googft-info-window{
+  margin:2px 4px;
+  background:#fff;
+  border:1px solid #717171;
+  padding:4px;
+}

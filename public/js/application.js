@@ -26,8 +26,8 @@ $(document).ready(function(){
     requestAjax.fail(showErrors);
   }
 
-  function getMarkerData(locations){
-    setMarkers(map,locations)
+  function getMarkerData(data){
+    setMarkers(map,data)
   }
 
   function showErrors(jqXHR, textStatus, errorThrown){
@@ -35,10 +35,11 @@ $(document).ready(function(){
   }
 
 
-  function setMarkers(map,locations){
+  function setMarkers(map,data){
     var markers = [];
-    for (var i = 0; i < locations.length; i++){
-      var site = locations[i];
+      var infowindow = new google.maps.InfoWindow()
+    for (var i in data){
+      var site = data[i];
       var myLatLng = new google.maps.LatLng(site.lat,site.lng);
       var marker = new google.maps.Marker({
         map: map,
@@ -46,31 +47,31 @@ $(document).ready(function(){
         animation: google.maps.Animation.DROP,
         position: myLatLng,
         title: site.title,
+        content: '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h1 id=firstHeading" class="firstHeading">'+site.title+'</h1>'+
+                '<div id="bodyContent">'+
+                '<p><b>Year: </b>'+site.release_year+'</p>'+
+                '<p><b>Locaton: </b>'+site.location+'</p>'+
+                '<p><b>Director: </b>'+site.director+'</p>'+
+                '<p><b>Writer: </b>'+site.writer+'</p>'+
+                '<p><b>Lead Actors: </b>'+site.actor1+', '+site.actor2+', '+site.actor3+'</p>'+
+                '<p><b>Fun Fact: </b>'+site.fun_fact+'</p>'+
+                '<p><a href="http://www.imdb.com/find?s=tt&q='+site.title+'">'+
+                  'http://www.imdb.com/find?s=tt&q='+site.title+'</a>' +
+                '</p>'+
+                '</div>'+
+                '</div>'
       });
 
       markers.push(marker);
       oms.addMarker(marker);
 
-      var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-        '<h1 id=firstHeading" class="firstHeading">'+site.title+'</h1>'+
-        '<div id="bodyContent">'+
-          '<p><b>Year: </b>'+site.release_year+'</p>'+
-          '<p><b>Locaton: </b>'+site.location+'</p>'+
-          '<p><b>Director: </b>'+site.director+'</p>'+
-          '<p><b>Writer: </b>'+site.writer+'</p>'+
-          '<p><b>Lead Actors: </b>'+site.actor1+', '+site.actor2+', '+site.actor3+'</p>'+
-          '<p><b>Fun Fact: </b>'+site.fun_fact+'</p>'+
-          '<p><a href="http://www.imdb.com/find?s=tt&q='+site.title+'">'+
-            'http://www.imdb.com/find?s=tt&q='+site.title+'</a>' +
-            '</p>'+
-        '</div>'+
-      '</div>';
-
-      var infowindow = new google.maps.InfoWindow();
-      infowindow.setContent(contentString);
-      google.maps.event.addListener(marker,'click',infoWindowCallback(infowindow, marker));
+      google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(this.content);
+            infowindow.open(map, this);
+        });
 
     } // End i loop
 
@@ -78,12 +79,6 @@ $(document).ready(function(){
     var mcOptions = {gridSize: 30, maxZoom: 15};
     var markerCluster = new MarkerClusterer(map, markers, mcOptions);
   } // End setMarkers
-
-  function infoWindowCallback(infowindow, marker) {
-    return function() {
-    infowindow.open(map,this);
-    };
-  };
 
 }); // End on load
 
