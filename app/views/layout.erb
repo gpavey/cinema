@@ -2,14 +2,28 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen"></style>
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen">
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTAT_GlI8mFh6UnBeEN4CRWqTTdAjfIsg&sensor=FALSE">
     </script>
 
   <!-- </head> -->
   <body>
-    <nav><input type="submit" value="Add Locations" class="add_movies"/></nav>
+    <nav>
+      <ul class="navbar">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Help</a>
+          <ul>
+              <li><a href="#">I really need somebody!</a>Help</br></li>
+              <li><a href="#">Not just anybody!</a>Help</li>
+              <li><a href="#">I really need someone!</a>Heeeeeeeeeeellllllllp</li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+      <input type="submit" value="Add Locations" class="add_movies"/>
     <%= yield %>
   </body>
     <!--  <script src="/js/jquery-1.11.1.min.js"></script>
