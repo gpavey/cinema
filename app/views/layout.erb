@@ -11,6 +11,7 @@
   <!-- </head> -->
   <body>
     <nav>
+      <div>
       <ul class="navbar">
         <li><a href="#">Home</a></li>
         <li><a href="#">About</a></li>
@@ -21,15 +22,18 @@
               <li><a href="#">I really need someone!</a>Heeeeeeeeeeellllllllp</li>
           </ul>
         </li>
-      </ul>
+      </ul></div>
+      <div class="dateRange">
+        <label for="from">From:</label>
+        <select id="first_year" name="from"/>
+        <input type="submit" value="Limit Date" class="limit_date" />
+      </div>
       <input type="submit" value="Add Locations" class="add_movies" />
     </nav>
+
     <%= yield %>
   </body>
-    <!--  <script src="/js/jquery-1.11.1.min.js"></script>
-    // <script src="/js/jquery.easing.min.js"></script>
-    // <script src="/js/view.js"></script>
-    // <script src="/js/model.js"></script> -->
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
     <script src="/js/application.js"></script>
     <script src="/js/oms.min.js"></script>

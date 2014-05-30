@@ -2,10 +2,14 @@
 $(document).ready(function(){
   var mapCenter = new google.maps.LatLng(37.7833, -122.4167);
   var map;
+  var markers = [];
+  var markerCluster;
   map_initialize();
   $('.add_movies').on('click', addMarkers)
   $('.add_movies').trigger('click')
   var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,keepSpiderfied: true});
+  pickDate();
+  $('.limit_date').on('click', clearOverlays)
 
   function map_initialize() {
     var mapOptions = {
@@ -14,19 +18,44 @@ $(document).ready(function(){
       overviewMapControl: true,
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
-  };  //end document ready
+  };  //end map_initialize
+
+  function clearOverlays(e) {
+
+    for (var i = 0; i < markers.length; i++ ) {
+      markers[i].setMap(null);
+    }
+    markers.length = 0;
+    markerCluster.clearMarkers();
+    changeMap(e);
+  }
+
+  function changeMap(e) {
+    e.preventDefault();
+    newDate = $('#first_year').val();
+    newDate.serializeArray;
+
+    var requestAjax = $.ajax({
+      url: '/movies',
+      type: 'GET',
+      data: {release_year: newDate}
+      });
+      requestAjax.done(getMarkerData);
+      requestAjax.fail(showErrors);
+  }
 
   function addMarkers(e) {
-  e.preventDefault();
-  var requestAjax = $.ajax({
-    url: '/locations',
-    type: 'GET'
-    });
-    requestAjax.done(getMarkerData);
-    requestAjax.fail(showErrors);
+    e.preventDefault();
+    var requestAjax = $.ajax({
+      url: '/locations',
+      type: 'GET',
+      });
+      requestAjax.done(getMarkerData);
+      requestAjax.fail(showErrors);
   }
 
   function getMarkerData(data){
+    debugger;
     setMarkers(map,data)
   }
 
@@ -36,8 +65,8 @@ $(document).ready(function(){
 
 
   function setMarkers(map,data){
-    var markers = [];
-      var infowindow = new google.maps.InfoWindow()
+
+    var infowindow = new google.maps.InfoWindow()
     for (var i in data){
       var site = data[i];
       var myLatLng = new google.maps.LatLng(site.lat,site.lng);
@@ -69,18 +98,30 @@ $(document).ready(function(){
       oms.addMarker(marker);
 
       google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(this.content);
-            infowindow.open(map, this);
-        });
-
+        // infowindow.setPosition(0,0, true)
+        infowindow.setContent(this.content);
+        infowindow.open(map, this);
+      });
     } // End i loop
 
     oms.addListener('spiderfy', function(markers) {infowindow.close();});
     var mcOptions = {gridSize: 30, maxZoom: 15};
-    var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+   markerCluster = new MarkerClusterer(map, markers, mcOptions);
   } // End setMarkers
 
+  function pickDate(){
+    var myDate = new Date();
+    var thisYear = myDate.getFullYear();
+    for (var i=1914; i < thisYear; i++){
+      $('#first_year').append('<option value ="'+i+'">'+i+'</option>')
+      $('#last_year').append('<option value ="'+i+'">'+i+'</option>')
+    };
+  };
+
+
 }); // End on load
+
+
 
 
 
