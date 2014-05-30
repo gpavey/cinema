@@ -55,7 +55,6 @@ $(document).ready(function(){
   }
 
   function getMarkerData(data){
-    debugger;
     setMarkers(map,data)
   }
 
@@ -110,6 +109,7 @@ $(document).ready(function(){
   } // End setMarkers
 
   function pickDate(){
+
     var myDate = new Date();
     var thisYear = myDate.getFullYear();
     for (var i=1914; i < thisYear; i++){

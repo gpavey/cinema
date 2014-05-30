@@ -14,3 +14,9 @@ get '/movies' do
   movies.to_json
   # redirect '/'
 end
+
+# get '/dates/' do
+#   dates = Movie.select(:release_date).distinct
+#   content_type :JSON
+#   dates.to_json
+# end
