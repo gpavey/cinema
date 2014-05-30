@@ -9,7 +9,7 @@ $(document).ready(function(){
   $('.add_movies').trigger('click')
   var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,keepSpiderfied: true});
   pickDate();
-  $('.limit_date').on('click', clearOverlays)
+  $('.limit_date').on('click', buttonChoice)
 
   function map_initialize() {
     var mapOptions = {
@@ -19,6 +19,17 @@ $(document).ready(function(){
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
   };  //end map_initialize
+
+  function buttonChoice(e){
+    var firstChoice = $('#first_year').val()
+    debugger;
+    if ( firstChoice === "ALL") {
+      addMarkers(e)
+    }
+    else {
+      clearOverlays(e);
+    }
+  }
 
   function clearOverlays(e) {
 
@@ -109,22 +120,24 @@ $(document).ready(function(){
   } // End setMarkers
 
   function pickDate(){
+
     var requestAjax = $.ajax({
       url: '/dates',
       type: 'GET',
       });
       requestAjax.done(getDates);
       requestAjax.fail(showErrors);
+
   };
 
-function getDates(data){
-  $('#first_year').append('<option value ="ALL">ALL</option>');
-   for (var i in data){
-    site = data[i]
-      $('#first_year').append('<option value ="'+site.release_year+'">'+site.release_year+'</option>');
-    };
+  function getDates(data){
+    $('#first_year').append('<option value ="ALL">ALL</option>');
+     for (var i in data){
+      site = data[i]
+        $('#first_year').append('<option value ="'+site.release_year+'">'+site.release_year+'</option>');
+      };
 
-}
+  }
 }); // End on load
 
 
