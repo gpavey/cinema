@@ -109,16 +109,22 @@ $(document).ready(function(){
   } // End setMarkers
 
   function pickDate(){
-
-    var myDate = new Date();
-    var thisYear = myDate.getFullYear();
-    for (var i=1914; i < thisYear; i++){
-      $('#first_year').append('<option value ="'+i+'">'+i+'</option>')
-      $('#last_year').append('<option value ="'+i+'">'+i+'</option>')
-    };
+    var requestAjax = $.ajax({
+      url: '/dates',
+      type: 'GET',
+      });
+      requestAjax.done(getDates);
+      requestAjax.fail(showErrors);
   };
 
+function getDates(data){
+  $('#first_year').append('<option value ="ALL">ALL</option>');
+   for (var i in data){
+    site = data[i]
+      $('#first_year').append('<option value ="'+site.release_year+'">'+site.release_year+'</option>');
+    };
 
+}
 }); // End on load
 
 
